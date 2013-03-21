@@ -1,0 +1,12 @@
+{% extends "master.html" %}
+{% block body %}
+	Existing Users : <br/>
+	{% for user in users %}
+		[{{ user.Level }}] {{ user.Name }} 
+		<ul>
+			{% for skill in user.Skills %}
+				<li> {{skill }}</li>
+			{% endfor %}
+		</ul>
+	{% endfor %}
+{% endblock %}

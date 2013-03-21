@@ -1,0 +1,16 @@
+{% extends "master.html" %}
+{%block body%}
+  <div id="container">
+    <h2>Tags</h2>
+    <div class="side-by-side clearfix">
+      <div>
+		<ul>
+			{% for tag in tags %}
+				<li><a href="/viewTag/{{ tag }}">{{ tag }}</a></li>
+			{% endfor %}
+		<ul>
+      </div>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+{% endblock %}

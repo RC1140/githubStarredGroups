@@ -1,0 +1,15 @@
+The github star grouper is a little app
+can be used to group your stared into more
+manageable groups.
+
+Requirements :
+
+Flask
+Redis
+Python
+
+TODO :
+
+Add export feature
+Add import feature
+Consider hosted version
