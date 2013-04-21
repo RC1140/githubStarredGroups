@@ -10,7 +10,7 @@ r = redis.Redis()
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route('/')
 def index():
 	repoHashes = r.lrange('REPOS',0,-1)
 	tags  = r.lrange('TAGS',0,-1)
@@ -20,7 +20,7 @@ def index():
 		
 	return render_template('index.html',repos=finalNames,tags=tags)
 
-@app.route("/saveTags",methods=['POST'])
+@app.route('/saveTags',methods=['POST'])
 def saveTags():
 	for keyPair in request.form:
 		r.delete('REPO:%s:TAGS'%keyPair)
@@ -28,12 +28,12 @@ def saveTags():
 			r.lpush('REPO:%s:TAGS'%keyPair,tag)
 	return redirect(url_for('index'))
 
-@app.route("/viewTags")
+@app.route('/viewTags')
 def viewTags():
 	tags  = r.lrange('TAGS',0,-1)
 	return render_template('tags.html',tags=tags)
 
-@app.route("/viewTag/<tag>")
+@app.route('/viewTag/<tag>')
 def viewTag(tag):
 	repoHashes = r.lrange('REPOS',0,-1)
 	finalRepos = []
@@ -43,6 +43,14 @@ def viewTag(tag):
 			finalRepos.append({'name':r.get('REPO:%s'%rHash)})
 		
 	return render_template('tag.html',repos=finalRepos,tag=tag)
+
+@app.route('/newTag',methods=['GET','POST'])
+def newTag():
+	if request.method == 'POST':
+		r.lpush('TAGS',request.form.get('tag'))
+		return redirect(url_for('viewTags'))
+	return render_template('newtag.html')
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=8000,debug=True)
