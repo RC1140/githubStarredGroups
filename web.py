@@ -5,20 +5,25 @@ from flask import request
 from flask import url_for
 
 import redis
+from pagination import Pagination
 
 r = redis.Redis()
 
 app = Flask(__name__)
 
 @app.route('/')
-def index():
+@app.route('/page/<int:pageNumber>')
+def index(pageNumber=None):
+	if not pageNumber:
+		pageNumber = 0
 	repoHashes = r.lrange('REPOS',0,-1)
 	tags  = r.lrange('TAGS',0,-1)
 	finalNames = []
-	for rHash in repoHashes[0:10]:
+	for rHash in repoHashes[(pageNumber*10):(pageNumber*10)+10]:
 		finalNames.append({'name':r.get('REPO:%s'%rHash),'hash':rHash,'tags':r.lrange('REPO:%s:TAGS'%rHash,0,-1)})
-		
-	return render_template('index.html',repos=finalNames,tags=tags)
+	print pageNumber
+	pagination = Pagination(pageNumber, 10, len(repoHashes))
+	return render_template('index.html',repos=finalNames,tags=tags,pagination=pagination)
 
 @app.route('/saveTags',methods=['POST'])
 def saveTags():

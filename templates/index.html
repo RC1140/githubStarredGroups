@@ -1,4 +1,6 @@
 {% extends "master.html" %}
+{% from "renderpager.html" import render_pagination %}
+
 {%block body%}
   <form method="POST" action="/saveTags">
   <div id="container">
@@ -20,7 +22,8 @@
 		{% endfor %}
       </div>
     </div>
-	<input type="submit" value="Save"/>
+	{{ render_pagination(pagination) }}
+		<input type="submit" value="Save"/>
   </div>
   </form>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
